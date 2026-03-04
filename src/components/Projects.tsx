@@ -253,30 +253,30 @@ export default function Projects() {
     <section id="projects" style={{ padding: '120px 32px', position: 'relative' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
-        {/* Header — matches Certificates pill style */}
+        {/* Header */}
         <div ref={headRef} className="section-animate" style={{ marginBottom: '56px' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '7px',
-            border: '1px solid #1e2d3d', borderRadius: '999px',
+            border: '1px solid var(--border)', borderRadius: '999px',
             padding: '5px 14px', marginBottom: '20px',
           }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6"/>
               <polyline points="8 6 2 12 8 18"/>
             </svg>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#e8edf2', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               Projects
             </span>
           </div>
 
           <h2 style={{
             fontFamily: 'var(--font-sans)', fontSize: 'clamp(2rem, 4vw, 3rem)',
-            fontWeight: 700, color: '#e8edf2',
+            fontWeight: 700, color: 'var(--text)',
             letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '12px',
           }}>
             Things I've Built
           </h2>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', color: '#6b8299', maxWidth: '460px', lineHeight: 1.65 }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', color: 'var(--text-muted)', maxWidth: '460px', lineHeight: 1.65 }}>
             A selection of ML, data, and full-stack projects — from forecasting engines to RAG systems.
           </p>
         </div>

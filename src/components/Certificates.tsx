@@ -78,7 +78,7 @@ const certificates: Certificate[] = [
     dateRange: '2024',
     jpg: '/certificates/dlsu-workshop.jpg',
     accent: '#4af2a1',
-    logo: '/logos/dlsu.png',
+    logo: '/certificates/dlsu_logo.png',
   },
   {
     title: 'Accenture Data Analytics & Visualization',
@@ -166,21 +166,23 @@ function Lightbox({ cert, onClose }: { cert: Certificate; onClose: () => void })
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: cert.accent, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '4px' }}>
             {cert.issuer} · {cert.dateRange}
           </p>
-          <h3 style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '17px', color: '#e8edf2' }}>
+          <h3 style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '17px', color: 'var(--text)' }}>
             {cert.title}
           </h3>
         </div>
         <button
           onClick={onClose}
           style={{
-            background: '#111827', border: '1px solid #1e2d3d',
-            borderRadius: '8px', color: '#6b8299',
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            color: 'var(--text-muted)',
             fontFamily: 'var(--font-mono)', fontSize: '11px',
             padding: '7px 16px', cursor: 'pointer',
             letterSpacing: '0.08em', transition: 'color 0.15s, border-color 0.15s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.color = '#e8edf2'; e.currentTarget.style.borderColor = '#3d5169' }}
-          onMouseLeave={e => { e.currentTarget.style.color = '#6b8299'; e.currentTarget.style.borderColor = '#1e2d3d' }}
+          onMouseEnter={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.borderColor = 'var(--text-subtle)' }}
+          onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'var(--border)' }}
         >
           ESC ✕
         </button>
@@ -191,8 +193,8 @@ function Lightbox({ cert, onClose }: { cert: Certificate; onClose: () => void })
         onClick={e => e.stopPropagation()}
         style={{
           width: '100%', maxWidth: '880px',
-          background: '#111827',
-          border: '1px solid #1e2d3d',
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
           borderRadius: '14px',
           overflow: 'hidden',
           position: 'relative',
@@ -220,14 +222,14 @@ function Lightbox({ cert, onClose }: { cert: Certificate; onClose: () => void })
           />
         ) : (
           <div style={{ padding: '48px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#3d5169', letterSpacing: '0.1em' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-subtle)', letterSpacing: '0.1em' }}>
               CERTIFICATE AVAILABLE UPON REQUEST
             </p>
           </div>
         )}
       </div>
 
-      <p style={{ marginTop: '14px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#3d5169', letterSpacing: '0.1em' }}>
+      <p style={{ marginTop: '14px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-subtle)', letterSpacing: '0.1em' }}>
         CLICK OUTSIDE OR PRESS ESC TO CLOSE
       </p>
     </div>
@@ -244,8 +246,8 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
       style={{
         width: '300px',
         flexShrink: 0,
-        background: '#111827',
-        border: '1px solid #1e2d3d',
+        background: 'var(--bg-2)',
+        border: '1px solid var(--border)',
         borderRadius: '16px',
         padding: '24px',
         display: 'flex',
@@ -271,15 +273,16 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
               style={{ width: '56px', height: '56px', objectFit: 'contain' }}
             />
           ) : (
-            <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '18px', color: '#1a2332' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '18px', color: 'var(--bg-3)' }}>
               {cert.issuer.slice(0, 2).toUpperCase()}
             </span>
           )}
         </div>
         <div style={{
-          width: '32px', height: '32px', background: '#1a2332',
+          width: '32px', height: '32px',
+          background: 'var(--surface)',
           borderRadius: '50%', display: 'flex', alignItems: 'center',
-          justifyContent: 'center', border: '1px solid #1e2d3d', flexShrink: 0,
+          justifyContent: 'center', border: '1px solid var(--border)', flexShrink: 0,
         }}>
           <ShieldIcon color={cert.accent} />
         </div>
@@ -294,14 +297,14 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
         }}>
           {cert.issuer}
         </span>
-        <span style={{ color: '#3d5169', fontSize: '12px' }}>·</span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#6b8299' }}>{cert.dateRange}</span>
+        <span style={{ color: 'var(--text-subtle)', fontSize: '12px' }}>·</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>{cert.dateRange}</span>
       </div>
 
       {/* Title */}
       <h3 style={{
         fontFamily: 'var(--font-sans)', fontSize: '17px', fontWeight: 700,
-        color: '#e8edf2', lineHeight: 1.3, marginBottom: '20px',
+        color: 'var(--text)', lineHeight: 1.3, marginBottom: '20px',
         letterSpacing: '-0.01em', flex: 1,
       }}>
         {cert.title}
@@ -311,16 +314,19 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
       {cert.jpg ? (
         <button
           onClick={onOpen}
+          className="cert-view-btn"
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
-            width: '100%', background: '#1e2d4a', border: '1px solid #2a3f5f',
+            width: '100%',
+            background: 'var(--accent-2-dim)',
+            border: '1px solid var(--border)',
             borderRadius: '8px', padding: '10px 16px',
-            color: '#7eb8f7', fontFamily: 'var(--font-sans)',
+            color: 'var(--accent-2)', fontFamily: 'var(--font-sans)',
             fontSize: '13px', fontWeight: 500, cursor: 'pointer',
             transition: 'background 0.2s, border-color 0.2s', marginBottom: '18px',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#243652'; e.currentTarget.style.borderColor = '#3a5278' }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#1e2d4a'; e.currentTarget.style.borderColor = '#2a3f5f' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.borderColor = 'var(--accent-2)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'var(--accent-2-dim)'; e.currentTarget.style.borderColor = 'var(--border)' }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -332,11 +338,11 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
       )}
 
       {/* Divider */}
-      <div style={{ height: '1px', background: '#1e2d3d', marginBottom: '14px' }} />
+      <div style={{ height: '1px', background: 'var(--border)', marginBottom: '14px' }} />
 
       {/* Footer */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#3d5169', letterSpacing: '0.03em' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-subtle)', letterSpacing: '0.03em' }}>
           {cert.credentialId ? `Credential ID: ${cert.credentialId.slice(0, 10)}` : 'Credential ID: —'}
         </span>
         {cert.verifyLink ? (
@@ -348,10 +354,10 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
             style={{
               display: 'flex', alignItems: 'center', gap: '4px',
               fontFamily: 'var(--font-mono)', fontSize: '11px',
-              color: '#6b8299', textDecoration: 'none', transition: 'color 0.15s',
+              color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.15s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.color = '#e8edf2')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#6b8299')}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
           >
             Verify
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -360,7 +366,7 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
             </svg>
           </a>
         ) : (
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#3d5169' }}>—</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-subtle)' }}>—</span>
         )}
       </div>
     </div>
@@ -372,7 +378,6 @@ export default function Certificates() {
   const headRef = useRef<HTMLDivElement>(null)
   const [activeCert, setActiveCert] = useState<Certificate | null>(null)
 
-  // Header scroll-in animation
   useEffect(() => {
     const el = headRef.current
     if (!el) return
@@ -390,36 +395,31 @@ export default function Certificates() {
       <div ref={headRef} className="section-animate" style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 32px', marginBottom: '56px' }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '7px',
-          border: '1px solid #1e2d3d', borderRadius: '999px',
+          border: '1px solid var(--border)', borderRadius: '999px',
           padding: '5px 14px', marginBottom: '20px',
         }}>
-          <ShieldIcon color="#4af2a1" />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#e8edf2', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+          <ShieldIcon color="var(--accent)" />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             Credentials
           </span>
         </div>
         <h2 style={{
           fontFamily: 'var(--font-sans)', fontSize: 'clamp(2rem, 4vw, 3rem)',
-          fontWeight: 700, color: '#e8edf2', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '12px',
+          fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '12px',
         }}>
           Professional Certifications
         </h2>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', color: '#6b8299', maxWidth: '480px', lineHeight: 1.65 }}>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', color: 'var(--text-muted)', maxWidth: '480px', lineHeight: 1.65 }}>
           Certificates I have picked up on my Personal Career journey
         </p>
       </div>
 
-      {/* ── CSS Marquee — no JS scroll needed ── */}
+      {/* ── CSS Marquee ── */}
       <div style={{ position: 'relative' }}>
         {/* Edge fades */}
         <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '120px', background: 'linear-gradient(90deg, var(--bg) 60%, transparent)', zIndex: 2, pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '120px', background: 'linear-gradient(270deg, var(--bg) 60%, transparent)', zIndex: 2, pointerEvents: 'none' }} />
 
-        {/*
-          Outer: clips overflow.
-          Inner: the moving strip — duplicated so the loop is seamless.
-          CSS animation slides the inner div from 0 to -50% (one full set width), then jumps back.
-        */}
         <div style={{ overflow: 'hidden', paddingBottom: '8px' }}>
           <div
             className="marquee-track"
@@ -432,11 +432,9 @@ export default function Certificates() {
               willChange: 'transform',
             }}
           >
-            {/* First set */}
             {certificates.map((cert, i) => (
               <CertCard key={`a-${i}`} cert={cert} onOpen={() => setActiveCert(cert)} />
             ))}
-            {/* Duplicate for seamless loop */}
             {certificates.map((cert, i) => (
               <CertCard key={`b-${i}`} cert={cert} onOpen={() => setActiveCert(cert)} />
             ))}
@@ -465,11 +463,10 @@ export default function Certificates() {
 
         .cert-card:hover {
           transform: translateY(-6px) !important;
-          border-color: #2a3f5f !important;
-          box-shadow: 0 20px 48px rgba(0,0,0,0.55);
+          border-color: var(--accent-2) !important;
+          box-shadow: 0 20px 48px rgba(0,0,0,0.2);
         }
 
-        /* Pause marquee when user hovers the strip */
         .marquee-track:hover {
           animation-play-state: paused;
         }

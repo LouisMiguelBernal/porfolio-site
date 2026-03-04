@@ -162,7 +162,7 @@ export default function Skills() {
             <div style={{ height: '1px', flex: 1, background: 'var(--bg-3)' }} />
           </div>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 400, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-            Technologies & tools
+            Technologies & Tools
           </h2>
         </div>
 

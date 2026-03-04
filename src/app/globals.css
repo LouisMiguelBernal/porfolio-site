@@ -22,6 +22,23 @@
   --font-sans: 'Syne', sans-serif;
 }
 
+
+/* light theme */
+[data-theme="light"] {
+  --bg: #f5f7fa;
+  --bg-2: #eef1f5;
+  --bg-3: #e3e8ef;
+  --surface: #d8e0ea;
+  --border: #c5d0de;
+  --text: #0d1117;
+  --text-muted: #4a6180;
+  --text-subtle: #7a95b0;
+  --accent: #00a86b;
+  --accent-dim: #d0f0e4;
+  --accent-2: #2a7fd4;
+  --accent-2-dim: #d0e6f8;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
