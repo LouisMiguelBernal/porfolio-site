@@ -180,3 +180,16 @@ body::before {
 .stagger.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.4s; }
 .stagger.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.5s; }
 .stagger.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.6s; }
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 35s linear infinite;
+}
