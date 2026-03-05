@@ -256,7 +256,7 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
-            <a href="/resume.pdf" target="_blank" style={{ marginTop: '12px', fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none' }}>
+            <a href="/certificates/resume.pdf" target="_blank" style={{ marginTop: '12px', fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none' }}>
               Resume ↗
             </a>
           </div>
