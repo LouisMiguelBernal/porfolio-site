@@ -10,8 +10,8 @@ const projects = [
     tags: ['YOLOv11', 'Python', 'Mobile', 'Computer Vision'],
     accent: '#4af2a1',
     year: '2026',
-    link: '#',
-    github: '#',
+    link: 'https://github.com/LouisMiguelBernal/VisorAI',
+    github: 'https://github.com/LouisMiguelBernal/VisorAI',
     imgIntro: '/projects/VR_intro.jpg',
     img1: '/projects/VR_1.jpg',
   },
@@ -22,8 +22,8 @@ const projects = [
     tags: ['TensorFlow', 'LSTM', 'Monte Carlo', 'Finance'],
     accent: '#7eb8f7',
     year: '2026',
-    link: '#',
-    github: '#',
+    link: 'https://deepsp500.streamlit.app/',
+    github: 'https://github.com/LouisMiguelBernal/DeepSP',
     imgIntro: '/projects/DP_intro.jpg',
     img1: '/projects/DP_1.jpg',
   },
@@ -34,20 +34,20 @@ const projects = [
     tags: ['LangChain', 'FAISS', 'Groq', 'RAG'],
     accent: '#c084fc',
     year: '2025',
-    link: '#',
-    github: '#',
+    link: 'https://giftxai.streamlit.app/',
+    github: 'https://github.com/LouisMiguelBernal/GiftxAI',
     imgIntro: '/projects/GA_intro.jpg',
     img1: '/projects/GA_1.jpg',
   },
   {
-    title: 'XGBoost Car Emission',
+    title: 'XGE',
     category: 'ML / DATA SCIENCE',
     description: 'End-to-end machine learning pipeline predicting vehicle CO₂ emissions using XGBoost with feature engineering, SHAP explainability, and an interactive dashboard for real-time emission forecasting.',
     tags: ['XGBoost', 'SHAP', 'Python', 'Scikit-learn'],
     accent: '#fb923c',
     year: '2025',
-    link: '#',
-    github: '#',
+    link: 'https://xge-ai.streamlit.app/',
+    github: 'https://github.com/LouisMiguelBernal/XGE',
     imgIntro: '/projects/XG_intro.png',
     img1: '/projects/XG_1.png',
   },
@@ -58,8 +58,8 @@ const projects = [
     tags: ['Streamlit', 'YFinance', 'Plotly', 'Python'],
     accent: '#34d399',
     year: '2024',
-    link: '#',
-    github: '#',
+    link: 'https://quantmaven.streamlit.app/',
+    github: 'https://github.com/LouisMiguelBernal/QuantMaven',
     imgIntro: '/projects/QM_Intro.jpg',
     img1: '/projects/QM_1.png',
   },
@@ -504,7 +504,7 @@ export default function Projects() {
               Things I've Built
             </h2>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', color: 'var(--text-muted)', maxWidth: '460px', lineHeight: 1.65 }}>
-              End-to-End Projects Showcasing My Expertise in AI Development
+              End-to-End Projects Showcasing my Expertise in AI Development
             </p>
           </div>
 

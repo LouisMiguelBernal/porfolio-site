@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import emailjs from '@emailjs/browser'
 
 function useScrollAnimation(ref: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
@@ -15,7 +16,6 @@ function useScrollAnimation(ref: React.RefObject<HTMLElement | null>) {
   }, [ref])
 }
 
-// Phone icon SVG
 function PhoneIcon({ size = 20, color = 'currentColor' }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -49,8 +49,8 @@ const contactLinks = [
   },
   {
     label: 'EMAIL',
-    value: 'louismbernal@gmail.com',
-    href: 'mailto:louismbernal@gmail.com',
+    value: 'miguellouis.work@gmail.com',
+    href: 'mailto:miguellouis.work@gmail.com',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -79,20 +79,43 @@ export default function Contact() {
   useScrollAnimation(leftRef  as React.RefObject<HTMLElement>)
   useScrollAnimation(rightRef as React.RefObject<HTMLElement>)
 
-  const [form, setForm]       = useState({ name: '', email: '', subject: '', message: '' })
+  const [form, setForm]           = useState({ name: '', email: '', subject: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending]     = useState(false)
+  const [error, setError]         = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }))
+    setError('')
   }
 
   const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.message) return
+    if (!form.name || !form.email || !form.message) {
+      setError('Please fill in your name, email, and message.')
+      return
+    }
     setSending(true)
-    await new Promise(r => setTimeout(r, 1200))
-    setSending(false)
-    setSubmitted(true)
+    setError('')
+
+    try {
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        {
+          name:    form.name,
+          email:   form.email,
+          subject: form.subject || 'No Subject',
+          message: form.message,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+      )
+      setSubmitted(true)
+    } catch (err) {
+      console.error('EmailJS error:', err)
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setSending(false)
+    }
   }
 
   const inputStyle = {
@@ -120,7 +143,6 @@ export default function Contact() {
             border: '1px solid var(--border)', borderRadius: '999px',
             padding: '5px 14px', marginBottom: '20px',
           }}>
-            {/* Phone badge icon instead of shield */}
             <PhoneIcon size={14} color="var(--accent)" />
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               Contact
@@ -134,10 +156,11 @@ export default function Contact() {
             Let's Work Together
           </h2>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', color: 'var(--text-muted)', maxWidth: '480px', lineHeight: 1.65 }}>
-              Open to meaningful collaborations, opportunities, and new connections.          </p>
+            Open to meaningful collaborations, opportunities, and new connections.
+          </p>
         </div>
 
-        {/* ── Two-column layout — stretch both cards to equal height ── */}
+        {/* ── Two-column layout ── */}
         <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '24px', alignItems: 'stretch' }}>
 
           {/* ── LEFT: info card ── */}
@@ -151,7 +174,6 @@ export default function Contact() {
             height: '100%',
             boxSizing: 'border-box' as const,
           }}>
-            {/* Accent top line */}
             <div style={{
               position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
               background: 'linear-gradient(90deg, var(--accent), transparent)',
@@ -170,7 +192,6 @@ export default function Contact() {
               Reach out through any of the channels below. I'll get back to you within 24 hours.
             </p>
 
-            {/* Contact links */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {contactLinks.map(item => (
                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -228,7 +249,6 @@ export default function Contact() {
             height: '100%',
             boxSizing: 'border-box' as const,
           }}>
-            {/* Accent top line */}
             <div style={{
               position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
               background: 'linear-gradient(90deg, var(--accent), transparent)',
@@ -312,6 +332,22 @@ export default function Contact() {
                     onBlur={e => (e.target.style.borderColor = 'var(--border)')}
                   />
                 </div>
+
+                {/* Error message */}
+                {error && (
+                  <div style={{
+                    marginBottom: '16px',
+                    padding: '12px 16px',
+                    borderRadius: '10px',
+                    background: 'rgba(255,80,80,0.08)',
+                    border: '1px solid rgba(255,80,80,0.25)',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '13px',
+                    color: '#ff6b6b',
+                  }}>
+                    {error}
+                  </div>
+                )}
 
                 {/* Submit */}
                 <button
