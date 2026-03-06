@@ -71,18 +71,67 @@ export default function Navbar() {
         }}
       >
         <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {/* Logo */}
-          <a href="#" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '13px',
-              color: 'var(--accent)',
-              background: 'var(--accent-dim)',
-              padding: '4px 10px',
-              borderRadius: '4px',
-              border: '1px solid rgba(74,242,161,0.2)',
-              letterSpacing: '0.05em',
-            }}>LM</span>
+          {/* Animated Logo Mark */}
+          <a href="#" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ position: 'relative', width: '36px', height: '36px', flexShrink: 0 }}>
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Rotating outer dashed ring */}
+                <circle
+                  cx="18" cy="18" r="16"
+                  stroke="var(--accent)" strokeWidth="1"
+                  strokeDasharray="5 3"
+                  opacity="0.35"
+                  style={{ animation: 'logoSpin 10s linear infinite', transformOrigin: '18px 18px' }}
+                />
+                {/* Inner bg */}
+                <circle cx="18" cy="18" r="13" fill="var(--accent-dim)" stroke="rgba(74,242,161,0.2)" strokeWidth="1" />
+
+                {/* Input layer nodes */}
+                <circle cx="10" cy="12" r="2" fill="var(--accent)" style={{ animation: 'nnPulse 2.8s ease-in-out infinite 0s' }} />
+                <circle cx="10" cy="18" r="2" fill="var(--accent)" style={{ animation: 'nnPulse 2.8s ease-in-out infinite 0.35s' }} />
+                <circle cx="10" cy="24" r="2" fill="var(--accent)" style={{ animation: 'nnPulse 2.8s ease-in-out infinite 0.7s' }} />
+
+                {/* Hidden layer nodes */}
+                <circle cx="18" cy="14.5" r="2" fill="var(--accent)" style={{ animation: 'nnPulse 2.8s ease-in-out infinite 0.9s' }} />
+                <circle cx="18" cy="21.5" r="2" fill="var(--accent)" style={{ animation: 'nnPulse 2.8s ease-in-out infinite 1.2s' }} />
+
+                {/* Output node */}
+                <circle cx="26" cy="18" r="2.3" fill="var(--accent)" style={{ animation: 'nnPulse 2.8s ease-in-out infinite 1.6s' }} />
+
+                {/* Connections input to hidden */}
+                <line x1="12" y1="12" x2="16" y2="14.5" stroke="var(--accent)" strokeWidth="0.7" opacity="0.45" />
+                <line x1="12" y1="12" x2="16" y2="21.5" stroke="var(--accent)" strokeWidth="0.7" opacity="0.2" />
+                <line x1="12" y1="18" x2="16" y2="14.5" stroke="var(--accent)" strokeWidth="0.7" opacity="0.45" />
+                <line x1="12" y1="18" x2="16" y2="21.5" stroke="var(--accent)" strokeWidth="0.7" opacity="0.45" />
+                <line x1="12" y1="24" x2="16" y2="14.5" stroke="var(--accent)" strokeWidth="0.7" opacity="0.2" />
+                <line x1="12" y1="24" x2="16" y2="21.5" stroke="var(--accent)" strokeWidth="0.7" opacity="0.45" />
+
+                {/* Connections hidden to output */}
+                <line x1="20" y1="14.5" x2="23.7" y2="18" stroke="var(--accent)" strokeWidth="0.7" opacity="0.55" />
+                <line x1="20" y1="21.5" x2="23.7" y2="18" stroke="var(--accent)" strokeWidth="0.7" opacity="0.55" />
+
+                {/* Traveling signal dots */}
+                <circle r="1.2" fill="var(--accent)" opacity="0.95">
+                  <animateMotion dur="2.2s" repeatCount="indefinite" begin="0s" path="M10,12 L18,14.5" />
+                </circle>
+                <circle r="1.2" fill="var(--accent)" opacity="0.95">
+                  <animateMotion dur="2.2s" repeatCount="indefinite" begin="0.7s" path="M10,24 L18,21.5" />
+                </circle>
+                <circle r="1.2" fill="var(--accent)" opacity="0.95">
+                  <animateMotion dur="2.2s" repeatCount="indefinite" begin="1.4s" path="M18,14.5 L26,18" />
+                </circle>
+              </svg>
+              <style>{`
+                @keyframes logoSpin {
+                  from { transform: rotate(0deg); }
+                  to   { transform: rotate(360deg); }
+                }
+                @keyframes nnPulse {
+                  0%, 100% { opacity: 0.4; }
+                  50%      { opacity: 1; }
+                }
+              `}</style>
+            </div>
             <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '15px', color: 'var(--text)', letterSpacing: '-0.01em' }}>Louis Miguel Bernal</span>
           </a>
 

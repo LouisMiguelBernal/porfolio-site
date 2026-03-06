@@ -14,6 +14,7 @@ type Certificate = {
 }
 
 const certificates: Certificate[] = [
+  // DeepLearning.AI — red (#e63946 brand red)
   {
     title: 'Deep Learning Specialization',
     issuer: 'DeepLearning.AI',
@@ -21,7 +22,7 @@ const certificates: Certificate[] = [
     credentialId: '5DCEBTE0WLYU',
     jpg: '/certificates/deep-learning-specialization.jpg',
     verifyLink: 'https://coursera.org/verify/5DCEBTE0WLYU',
-    accent: '#4af2a1',
+    accent: '#e63946',
     logo: '/certificates/DL_logo.png',
   },
   {
@@ -31,7 +32,7 @@ const certificates: Certificate[] = [
     credentialId: 'AGSTIN6MFW6H',
     jpg: '/certificates/sequence-models.jpg',
     verifyLink: 'https://coursera.org/verify/AGSTIN6MFW6H',
-    accent: '#4af2a1',
+    accent: '#e63946',
     logo: '/certificates/DL_logo.png',
   },
   {
@@ -41,7 +42,7 @@ const certificates: Certificate[] = [
     credentialId: 'VOPC3983POHV',
     jpg: '/certificates/convolutional-neural-networks.jpg',
     verifyLink: 'https://coursera.org/verify/VOPC3983POHV',
-    accent: '#7eb8f7',
+    accent: '#e63946',
     logo: '/certificates/DL_logo.png',
   },
   {
@@ -49,7 +50,7 @@ const certificates: Certificate[] = [
     issuer: 'DeepLearning.AI',
     dateRange: '2025',
     jpg: '/certificates/improving-deep-neural-networks.jpg',
-    accent: '#7eb8f7',
+    accent: '#e63946',
     logo: '/certificates/DL_logo.png',
   },
   {
@@ -59,7 +60,7 @@ const certificates: Certificate[] = [
     credentialId: '3520567IBKAP',
     jpg: '/certificates/neural-networks-deep-learning.jpg',
     verifyLink: 'https://coursera.org/verify/3520567IBKAP',
-    accent: '#4af2a1',
+    accent: '#e63946',
     logo: '/certificates/DL_logo.png',
   },
   {
@@ -69,9 +70,10 @@ const certificates: Certificate[] = [
     credentialId: 'PW7B3FJBJ8L5',
     jpg: '/certificates/structuring-ml-projects.jpg',
     verifyLink: 'https://coursera.org/verify/PW7B3FJBJ8L5',
-    accent: '#c084fc',
+    accent: '#e63946',
     logo: '/certificates/DL_logo.png',
   },
+  // De La Salle University — kept as green (school brand)
   {
     title: 'Data Science Workshop 2024',
     issuer: 'De La Salle University',
@@ -80,42 +82,46 @@ const certificates: Certificate[] = [
     accent: '#4af2a1',
     logo: '/certificates/dlsu_logo.png',
   },
+  // Accenture — violet (#a100ff brand purple)
   {
     title: 'Accenture Data Analytics & Visualization',
     issuer: 'Forage',
     dateRange: '2024',
     credentialId: 'hHvNNDaQemSPXKWTK',
     jpg: '/certificates/accenture-simulation.jpg',
-    accent: '#f472b6',
+    accent: '#a100ff',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Accenture.svg/320px-Accenture.svg.png',
   },
+  // freeCodeCamp — blue (#0a0a23 is dark but brand blue is #006400, using accessible blue)
   {
     title: 'Data Analysis with Python',
     issuer: 'freeCodeCamp',
     dateRange: '2023',
     jpg: '/certificates/fcc-python.jpg',
-    accent: '#34d399',
+    accent: '#3b82f6',
     logo: '/certificates/fcc_logo.jpg',
   },
+  // Great Learning — blue
   {
     title: 'Data Analytics using Excel',
     issuer: 'Great Learning',
     dateRange: '2023',
-    accent: '#7eb8f7',
+    accent: '#3b82f6',
     logo: '/certificates/GL_logo.jpg',
   },
   {
     title: 'Introduction to Analytics',
     issuer: 'Great Learning',
     dateRange: '2023',
-    accent: '#4af2a1',
+    accent: '#3b82f6',
     logo: '/certificates/GL_logo.jpg',
   },
+  // Google — green (#34a853 Google green)
   {
     title: 'Google Analytics',
     issuer: 'Google',
     dateRange: '2023',
-    accent: '#fb923c',
+    accent: '#34a853',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/320px-Google_2015_logo.svg.png',
   },
 ]
@@ -128,7 +134,7 @@ function ShieldIcon({ color }: { color: string }) {
   )
 }
 
-// ── Lightbox ─────────────────────────────────────────────────────────────────
+// ── Lightbox ──────────────────────────────────────────────────────────────────
 function Lightbox({ cert, onClose }: { cert: Certificate; onClose: () => void }) {
   useEffect(() => {
     const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -153,7 +159,6 @@ function Lightbox({ cert, onClose }: { cert: Certificate; onClose: () => void })
         animation: 'lbFadeIn 0.15s ease',
       }}
     >
-      {/* Top bar */}
       <div
         onClick={e => e.stopPropagation()}
         style={{
@@ -173,10 +178,8 @@ function Lightbox({ cert, onClose }: { cert: Certificate; onClose: () => void })
         <button
           onClick={onClose}
           style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: '8px',
-            color: 'var(--text-muted)',
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: '8px', color: 'var(--text-muted)',
             fontFamily: 'var(--font-mono)', fontSize: '11px',
             padding: '7px 16px', cursor: 'pointer',
             letterSpacing: '0.08em', transition: 'color 0.15s, border-color 0.15s',
@@ -188,38 +191,20 @@ function Lightbox({ cert, onClose }: { cert: Certificate; onClose: () => void })
         </button>
       </div>
 
-      {/* Image viewer */}
       <div
         onClick={e => e.stopPropagation()}
         style={{
           width: '100%', maxWidth: '880px',
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: '14px',
-          overflow: 'hidden',
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '300px',
-          maxHeight: '72vh',
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: '14px', overflow: 'hidden', position: 'relative',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          minHeight: '300px', maxHeight: '72vh',
           animation: 'lbSlideUp 0.18s ease',
         }}
       >
-        {/* accent top line */}
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(90deg, ${cert.accent}, transparent)` }} />
-
         {cert.jpg ? (
-          <img
-            src={cert.jpg}
-            alt={cert.title}
-            style={{
-              maxWidth: '100%',
-              maxHeight: '72vh',
-              objectFit: 'contain',
-              display: 'block',
-            }}
-          />
+          <img src={cert.jpg} alt={cert.title} style={{ maxWidth: '100%', maxHeight: '72vh', objectFit: 'contain', display: 'block' }} />
         ) : (
           <div style={{ padding: '48px', textAlign: 'center' }}>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-subtle)', letterSpacing: '0.1em' }}>
@@ -236,7 +221,7 @@ function Lightbox({ cert, onClose }: { cert: Certificate; onClose: () => void })
   )
 }
 
-// ── Card ─────────────────────────────────────────────────────────────────────
+// ── Card ──────────────────────────────────────────────────────────────────────
 function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
   const [logoError, setLogoError] = useState(false)
 
@@ -245,11 +230,13 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
       className="cert-card"
       style={{
         width: '300px',
+        // Taller card — closer to project card height feel
+        minHeight: '420px',
         flexShrink: 0,
         background: 'var(--bg-2)',
         border: '1px solid var(--border)',
         borderRadius: '16px',
-        padding: '24px',
+        padding: '28px 24px',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
@@ -259,28 +246,26 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
       }}
     >
       {/* Top row: logo + shield */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div style={{
-          width: '72px', height: '72px', background: '#fff',
-          borderRadius: '12px', display: 'flex', alignItems: 'center',
+          width: '80px', height: '80px', background: '#fff',
+          borderRadius: '14px', display: 'flex', alignItems: 'center',
           justifyContent: 'center', overflow: 'hidden', flexShrink: 0,
         }}>
           {!logoError ? (
             <img
-              src={cert.logo}
-              alt={cert.issuer}
+              src={cert.logo} alt={cert.issuer}
               onError={() => setLogoError(true)}
-              style={{ width: '56px', height: '56px', objectFit: 'contain' }}
+              style={{ width: '62px', height: '62px', objectFit: 'contain' }}
             />
           ) : (
-            <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '18px', color: 'var(--bg-3)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '20px', color: 'var(--bg-3)' }}>
               {cert.issuer.slice(0, 2).toUpperCase()}
             </span>
           )}
         </div>
         <div style={{
-          width: '32px', height: '32px',
-          background: 'var(--surface)',
+          width: '34px', height: '34px', background: 'var(--surface)',
           borderRadius: '50%', display: 'flex', alignItems: 'center',
           justifyContent: 'center', border: '1px solid var(--border)', flexShrink: 0,
         }}>
@@ -289,7 +274,7 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
       </div>
 
       {/* Issuer + year */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
         <span style={{
           fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 500,
           color: cert.accent, letterSpacing: '0.06em', textTransform: 'uppercase',
@@ -304,7 +289,7 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
       {/* Title */}
       <h3 style={{
         fontFamily: 'var(--font-sans)', fontSize: '17px', fontWeight: 700,
-        color: 'var(--text)', lineHeight: 1.3, marginBottom: '20px',
+        color: 'var(--text)', lineHeight: 1.35, marginBottom: '24px',
         letterSpacing: '-0.01em', flex: 1,
       }}>
         {cert.title}
@@ -320,7 +305,7 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
             width: '100%',
             background: 'var(--accent-2-dim)',
             border: '1px solid var(--border)',
-            borderRadius: '8px', padding: '10px 16px',
+            borderRadius: '8px', padding: '11px 16px',
             color: 'var(--accent-2)', fontFamily: 'var(--font-sans)',
             fontSize: '13px', fontWeight: 500, cursor: 'pointer',
             transition: 'background 0.2s, border-color 0.2s', marginBottom: '18px',
@@ -334,7 +319,7 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
           View Certificate
         </button>
       ) : (
-        <div style={{ height: '42px', marginBottom: '18px' }} />
+        <div style={{ height: '44px', marginBottom: '18px' }} />
       )}
 
       {/* Divider */}
@@ -343,13 +328,11 @@ function CertCard({ cert, onOpen }: { cert: Certificate; onOpen: () => void }) {
       {/* Footer */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-subtle)', letterSpacing: '0.03em' }}>
-          {cert.credentialId ? `Credential ID: ${cert.credentialId.slice(0, 10)}` : 'Credential ID: —'}
+          {cert.credentialId ? `ID: ${cert.credentialId.slice(0, 10)}` : 'Credential ID: —'}
         </span>
         {cert.verifyLink ? (
           <a
-            href={cert.verifyLink}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={cert.verifyLink} target="_blank" rel="noopener noreferrer"
             onClick={e => e.stopPropagation()}
             style={{
               display: 'flex', alignItems: 'center', gap: '4px',
@@ -414,11 +397,9 @@ export default function Certificates() {
         </p>
       </div>
 
-      {/* ── CSS Marquee ── */}
+      {/* ── Marquee ── */}
       <div style={{ position: 'relative' }}>
-        {/* Edge fades */}
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '120px', background: 'linear-gradient(90deg, var(--bg) 60%, transparent)', zIndex: 2, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '120px', background: 'linear-gradient(270deg, var(--bg) 60%, transparent)', zIndex: 2, pointerEvents: 'none' }} />
+
 
         <div style={{ overflow: 'hidden', paddingBottom: '8px' }}>
           <div
@@ -461,10 +442,22 @@ export default function Certificates() {
           to   { opacity: 1; transform: translateY(0); }
         }
 
-        .cert-card:hover {
-          transform: translateY(-6px) !important;
-          border-color: var(--accent-2) !important;
-          box-shadow: 0 20px 48px rgba(0,0,0,0.2);
+        /* Desktop hover — lift + glow */
+        @media (hover: hover) {
+          .cert-card:hover {
+            transform: translateY(-6px) !important;
+            border-color: var(--accent-2) !important;
+            box-shadow: 0 20px 48px rgba(0,0,0,0.2) !important;
+          }
+        }
+
+        /* Mobile — disable hover shadow that blocks interaction */
+        @media (hover: none) {
+          .cert-card:hover {
+            transform: none !important;
+            box-shadow: none !important;
+            border-color: var(--border) !important;
+          }
         }
 
         .marquee-track:hover {
