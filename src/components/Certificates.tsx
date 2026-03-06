@@ -90,7 +90,7 @@ const certificates: Certificate[] = [
     credentialId: 'hHvNNDaQemSPXKWTK',
     jpg: '/certificates/accenture-simulation.jpg',
     accent: '#a100ff',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Accenture.svg/320px-Accenture.svg.png',
+    logo: '/certificates/ac_logo.png',
   },
   // freeCodeCamp — blue (#0a0a23 is dark but brand blue is #006400, using accessible blue)
   {
@@ -106,6 +106,8 @@ const certificates: Certificate[] = [
     title: 'Data Analytics using Excel',
     issuer: 'Great Learning',
     dateRange: '2023',
+    jpg: '/certificates/gr_excel.jpg',
+    verifyLink: 'https://www.mygreatlearning.com/certificate/ETRAYBKU?referrer_code=GLZY-_MSHPD5Y',
     accent: '#3b82f6',
     logo: '/certificates/GL_logo.jpg',
   },
@@ -113,6 +115,8 @@ const certificates: Certificate[] = [
     title: 'Introduction to Analytics',
     issuer: 'Great Learning',
     dateRange: '2023',
+    jpg: '/certificates/gr_analytics.jpg',
+    verifyLink: 'https://www.mygreatlearning.com/certificate/PGLBYALE?referrer_code=GLZY-_MSHPD5Y',
     accent: '#3b82f6',
     logo: '/certificates/GL_logo.jpg',
   },
@@ -122,6 +126,7 @@ const certificates: Certificate[] = [
     issuer: 'Google',
     dateRange: '2023',
     accent: '#34a853',
+    verifyLink: 'https://support.google.com/analytics/answer/15068052#zippy=,get-started-using-google-analytics-introduction,go-further-with-advanced-features-in-google-analytics-advanced,answer-business-questions-with-google-analytics-intermediate,use-google-analytics-for-your-business-beginner',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/320px-Google_2015_logo.svg.png',
   },
 ]

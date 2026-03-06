@@ -68,6 +68,12 @@ const TYPE_COLOR: Record<string, string> = {
   edu:  '#c084fc',
 }
 
+const TYPE_COLOR_RAW: Record<string, string> = {
+  work: '#4af2a1',
+  org:  '#60a5fa',
+  edu:  '#c084fc',
+}
+
 function useScrollAnimation(ref: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     const el = ref.current
@@ -118,7 +124,6 @@ function PhotoSlideshow() {
       `}</style>
 
       <div style={{ marginBottom: '28px' }}>
-        {/* Frame */}
         <div style={{
           width: '100%',
           aspectRatio: '4 / 3',
@@ -129,43 +134,30 @@ function PhotoSlideshow() {
           border: '1px solid var(--border)',
           boxShadow: '0 16px 48px rgba(0,0,0,0.25)',
         }}>
-          {/* Accent top line */}
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
             background: 'linear-gradient(90deg, var(--accent), var(--accent-2), #c084fc)',
             zIndex: 4,
           }} />
 
-          {/* Outgoing */}
           {prev !== null && (
-            <img
-              src={photos[prev]}
-              alt=""
-              style={{
-                position: 'absolute', inset: 0,
-                width: '100%', height: '100%',
-                objectFit: 'cover',
-                animation: 'slideOutLeft 0.55s ease forwards',
-                zIndex: 1,
-              }}
-            />
-          )}
-
-          {/* Current */}
-          <img
-            key={current}
-            src={photos[current]}
-            alt={`Photo ${current + 1}`}
-            style={{
+            <img src={photos[prev]} alt="" style={{
               position: 'absolute', inset: 0,
               width: '100%', height: '100%',
               objectFit: 'cover',
-              animation: sliding ? 'slideInRight 0.55s ease forwards' : 'none',
-              zIndex: 2,
-            }}
-          />
+              animation: 'slideOutLeft 0.55s ease forwards',
+              zIndex: 1,
+            }} />
+          )}
 
-          {/* Counter badge */}
+          <img key={current} src={photos[current]} alt={`Photo ${current + 1}`} style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover',
+            animation: sliding ? 'slideInRight 0.55s ease forwards' : 'none',
+            zIndex: 2,
+          }} />
+
           <div style={{
             position: 'absolute', bottom: '12px', right: '12px', zIndex: 5,
             background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)',
@@ -176,7 +168,6 @@ function PhotoSlideshow() {
             {current + 1} / {photos.length}
           </div>
 
-          {/* Prev / Next arrows */}
           {[
             { dir: -1, side: 'left' as const },
             { dir:  1, side: 'right' as const },
@@ -207,7 +198,6 @@ function PhotoSlideshow() {
           ))}
         </div>
 
-        {/* Dot indicators */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '12px' }}>
           {photos.map((_, i) => (
             <button
@@ -227,6 +217,179 @@ function PhotoSlideshow() {
         </div>
       </div>
     </>
+  )
+}
+
+// ── Scroll-driven timeline ────────────────────────────────────────────────────
+function Timeline() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const lineRef      = useRef<HTMLDivElement>(null)
+  const orbRef       = useRef<HTMLDivElement>(null)
+  const [activeIdx, setActiveIdx]   = useState(0)
+  const [orbColor,  setOrbColor]    = useState(TYPE_COLOR_RAW['work'])
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const container = containerRef.current
+      const line      = lineRef.current
+      const orb       = orbRef.current
+      if (!container || !line || !orb) return
+
+      const containerRect = container.getBoundingClientRect()
+      const lineRect      = line.getBoundingClientRect()
+      const viewportMid   = window.innerHeight * 0.5
+
+      // How far the viewport midpoint is along the line
+      const lineTop    = lineRect.top
+      const lineHeight = lineRect.height
+      const progress   = Math.max(0, Math.min(1, (viewportMid - lineTop) / lineHeight))
+
+      // Move orb
+      orb.style.top = `${progress * lineHeight}px`
+
+      // Find which item is closest to orb
+      let closestIdx = 0
+      let closestDist = Infinity
+      itemRefs.current.forEach((el, i) => {
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        const itemMid = rect.top + rect.height / 2
+        const dist = Math.abs(itemMid - viewportMid)
+        if (dist < closestDist) {
+          closestDist = dist
+          closestIdx  = i
+        }
+      })
+
+      setActiveIdx(closestIdx)
+      setOrbColor(TYPE_COLOR_RAW[experience[closestIdx].type])
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return (
+    <div ref={containerRef} style={{ position: 'relative' }}>
+      {/* Static line */}
+      <div ref={lineRef} style={{
+        position: 'absolute', left: '6px', top: '6px', bottom: '0',
+        width: '1px', background: 'var(--bg-3)',
+      }} />
+
+      {/* Scroll-driven orb */}
+      <div ref={orbRef} style={{
+        position: 'absolute',
+        left: '-1px',
+        top: '6px',
+        width: '15px',
+        height: '15px',
+        borderRadius: '50%',
+        background: orbColor,
+        boxShadow: `0 0 14px ${orbColor}99, 0 0 28px ${orbColor}44`,
+        zIndex: 10,
+        transition: 'background 0.4s ease, box-shadow 0.4s ease',
+        pointerEvents: 'none',
+      }} />
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+        {experience.map((exp, i) => {
+          const color    = TYPE_COLOR[exp.type]
+          const colorRaw = TYPE_COLOR_RAW[exp.type]
+          const isActive = i === activeIdx
+
+          return (
+            <div
+              key={i}
+              ref={el => { itemRefs.current[i] = el }}
+              className="exp-card"
+              style={{
+                paddingLeft: '32px',
+                position: 'relative',
+                background: 'var(--bg-2)',
+                border: `1px solid ${isActive ? colorRaw + '55' : 'var(--border)'}`,
+                borderRadius: '16px',
+                padding: '20px 20px 20px 32px',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
+                cursor: 'default',
+                willChange: 'transform',
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget
+                el.style.transform = 'scale(1.025) translateY(-3px)'
+                el.style.boxShadow = `0 16px 40px rgba(0,0,0,0.25), 0 0 0 1px ${colorRaw}44`
+                el.style.borderColor = colorRaw + '88'
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget
+                el.style.transform = 'scale(1) translateY(0)'
+                el.style.boxShadow = 'none'
+                el.style.borderColor = isActive ? colorRaw + '55' : 'var(--border)'
+              }}
+            >
+              {/* Accent left bar */}
+              <div style={{
+                position: 'absolute', left: 0, top: '12px', bottom: '12px',
+                width: '3px', borderRadius: '2px',
+                background: isActive
+                  ? `linear-gradient(180deg, ${colorRaw}, ${colorRaw}44)`
+                  : 'var(--bg-3)',
+                transition: 'background 0.4s ease',
+              }} />
+
+              <div style={{
+                display: 'flex', justifyContent: 'space-between',
+                alignItems: 'flex-start', marginBottom: '4px',
+                flexWrap: 'wrap', gap: '4px',
+              }}>
+                <span style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '15px',
+                  fontWeight: 700, color: 'var(--text)',
+                }}>
+                  {exp.role}
+                </span>
+                <span style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '11px',
+                  color: 'var(--text-subtle)', letterSpacing: '0.03em', flexShrink: 0,
+                }}>
+                  {exp.period}
+                </span>
+              </div>
+
+              <div style={{
+                fontFamily: 'var(--font-mono)', fontSize: '12px',
+                color: color, marginBottom: '10px', letterSpacing: '0.02em',
+                display: 'flex', alignItems: 'center', gap: '6px',
+              }}>
+                <span style={{ opacity: 0.7 }}>{TYPE_ICON[exp.type]}</span>
+                {exp.company}
+              </div>
+
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '13px',
+                color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: '12px',
+              }}>
+                {exp.desc}
+              </p>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                {exp.tags.map(tag => (
+                  <span key={tag} style={{
+                    fontFamily: 'var(--font-mono)', fontSize: '11px',
+                    color: 'var(--text-subtle)', background: 'var(--bg-3)',
+                    padding: '2px 8px', borderRadius: '3px',
+                  }}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
@@ -273,67 +436,104 @@ export default function About() {
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '64px',
-          alignItems: 'start',
+          alignItems: 'stretch',
         }}>
 
           {/* ── Bio ── */}
-          <div ref={bioRef} className="section-animate">
-
-            {/* Photo Slideshow */}
+          <div ref={bioRef} className="section-animate" style={{ display: 'flex', flexDirection: 'column' }}>
             <PhotoSlideshow />
 
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', color: 'var(--text-muted)', lineHeight: 1.75, marginBottom: '20px' }}>
-              I'm a <span style={{ color: 'var(--text)' }}>Computer Science student</span> at De La Salle University Dasmariñas,
-              specializing in Intelligent Systems. I'm passionate about data, machine learning,
-              and building tools that solve real problems.
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.75, marginBottom: '20px' }}>
+              A <span style={{ color: 'var(--text)' }}>graduating Computer Science student</span> at De La Salle University Dasmariñas,
+              specializing in Intelligent Systems — with a GPA of{' '}
+              <span style={{ color: 'var(--accent)' }}>3.83/4.0</span> and a consistent
+              <span style={{ color: 'var(--accent)' }}> Dean's Lister</span> standing throughout my academic career.
+              My work sits at the intersection of data engineering, machine learning, and applied analytics,
+              with a focus on building scalable solutions that drive measurable outcomes.
             </p>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', color: 'var(--text-muted)', lineHeight: 1.75, marginBottom: '32px' }}>
-              Outside of academics I lead technical committees, tinker with side projects,
-              and chase the next interesting dataset. Based in{' '}
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.75, marginBottom: '32px' }}>
+              Beyond the classroom, I take on leadership roles in technical organizations,
+              develop independent projects, and continuously explore emerging tools in the
+              data and AI space. Currently based in{' '}
               <span style={{ color: 'var(--text)' }}>Cavite, Philippines</span>.
             </p>
 
-            {/* Info chips */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {[
-                { label: 'School',   value: 'DLSUD — BSCS Intelligent Systems', href: 'https://www.dlsud.edu.ph/' },
-                { label: 'GitHub',   value: 'github.com/LouisMiguelBernal',      href: 'https://github.com/LouisMiguelBernal' },
-                { label: 'LinkedIn', value: 'linkedin.com/in/louisbernal',       href: 'https://www.linkedin.com/in/louisbernal/' },
+                { label: 'School',   value: 'DLSUD — BSCS Intelligent Systems', href: 'https://www.dlsud.edu.ph/',                  icon: '🎓' },
+                { label: 'GitHub',   value: 'github.com/LouisMiguelBernal',      href: 'https://github.com/LouisMiguelBernal',       icon: '⌥' },
+                { label: 'LinkedIn', value: 'linkedin.com/in/louisbernal',       href: 'https://www.linkedin.com/in/louisbernal/',   icon: '💼' },
               ].map(item => (
-                <div key={item.label} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                  <span style={{
-                    fontFamily: 'var(--font-mono)', fontSize: '11px',
-                    color: 'var(--text-subtle)', letterSpacing: '0.05em', minWidth: '60px',
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '16px',
+                    background: 'var(--bg-2)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '14px',
+                    padding: '16px 20px',
+                    textDecoration: 'none',
+                    transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget
+                    el.style.transform = 'scale(1.03) translateY(-2px)'
+                    el.style.boxShadow = '0 12px 32px rgba(0,0,0,0.2), 0 0 0 1px var(--accent)'
+                    el.style.borderColor = 'var(--accent)'
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget
+                    el.style.transform = 'scale(1) translateY(0)'
+                    el.style.boxShadow = 'none'
+                    el.style.borderColor = 'var(--border)'
+                  }}
+                >
+                  <div style={{
+                    width: '42px', height: '42px', borderRadius: '10px',
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '18px', flexShrink: 0,
                   }}>
-                    {item.label}
-                  </span>
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '10px',
+                      color: 'var(--accent)', letterSpacing: '0.12em',
+                      textTransform: 'uppercase', marginBottom: '3px',
+                    }}>
+                      {item.label}
+                    </p>
+                    <p style={{
                       fontFamily: 'var(--font-sans)', fontSize: '14px',
-                      color: 'var(--accent)', textDecoration: 'none', transition: 'opacity 0.2s',
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')}
-                    onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-                  >
-                    {item.value}
-                  </a>
-                </div>
+                      fontWeight: 600, color: 'var(--text)',
+                    }}>
+                      {item.value}
+                    </p>
+                  </div>
+                  <svg style={{ marginLeft: 'auto', color: 'var(--text-subtle)', flexShrink: 0 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                </a>
               ))}
             </div>
 
-            {/* Legend */}
-            <div style={{ marginTop: '36px', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+            {/* Legend — pushed to bottom to align with right column */}
+            <div style={{ marginTop: 'auto', paddingTop: '36px', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
               {[
                 { label: 'Work',         color: 'var(--accent)',   icon: '◈' },
                 { label: 'Organization', color: 'var(--accent-2)', icon: '◉' },
                 { label: 'Education',    color: '#c084fc',          icon: '⬡' },
               ].map(l => (
                 <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ color: l.color, fontSize: '12px' }}>{l.icon}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-subtle)', letterSpacing: '0.05em' }}>
+                  <span style={{ color: l.color, fontSize: '14px' }}>{l.icon}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-subtle)', letterSpacing: '0.05em' }}>
                     {l.label}
                   </span>
                 </div>
@@ -341,7 +541,7 @@ export default function About() {
             </div>
           </div>
 
-          {/* ── Experience / Education Timeline ── */}
+          {/* ── Timeline ── */}
           <div ref={expRef} className="section-animate">
             <h3 style={{
               fontFamily: 'var(--font-mono)', fontSize: '12px',
@@ -349,70 +549,7 @@ export default function About() {
             }}>
               EXPERIENCE & EDUCATION
             </h3>
-
-            <div style={{ position: 'relative' }}>
-              <div style={{
-                position: 'absolute', left: '6px', top: '6px', bottom: '0',
-                width: '1px', background: 'var(--bg-3)',
-              }} />
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
-                {experience.map((exp, i) => {
-                  const color = TYPE_COLOR[exp.type]
-                  const isFirst = i === 0
-
-                  return (
-                    <div key={i} style={{ paddingLeft: '28px', position: 'relative' }}>
-                      <div style={{
-                        position: 'absolute', left: 0, top: '5px',
-                        width: '13px', height: '13px', borderRadius: '50%',
-                        background: isFirst ? color : 'var(--bg-3)',
-                        border: `2px solid ${isFirst ? color : 'var(--bg-3)'}`,
-                        boxShadow: isFirst ? `0 0 10px ${color}55` : 'none',
-                      }} />
-
-                      <div style={{
-                        display: 'flex', justifyContent: 'space-between',
-                        alignItems: 'flex-start', marginBottom: '4px',
-                        flexWrap: 'wrap', gap: '4px',
-                      }}>
-                        <span style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 600, color: 'var(--text)' }}>
-                          {exp.role}
-                        </span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-subtle)', letterSpacing: '0.03em', flexShrink: 0 }}>
-                          {exp.period}
-                        </span>
-                      </div>
-
-                      <div style={{
-                        fontFamily: 'var(--font-mono)', fontSize: '12px',
-                        color: color, marginBottom: '10px', letterSpacing: '0.02em',
-                        display: 'flex', alignItems: 'center', gap: '6px',
-                      }}>
-                        <span style={{ opacity: 0.7 }}>{TYPE_ICON[exp.type]}</span>
-                        {exp.company}
-                      </div>
-
-                      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: '12px' }}>
-                        {exp.desc}
-                      </p>
-
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                        {exp.tags.map(tag => (
-                          <span key={tag} style={{
-                            fontFamily: 'var(--font-mono)', fontSize: '11px',
-                            color: 'var(--text-subtle)', background: 'var(--bg-3)',
-                            padding: '2px 8px', borderRadius: '3px',
-                          }}>
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
+            <Timeline />
           </div>
 
         </div>
