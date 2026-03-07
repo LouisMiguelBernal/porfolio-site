@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Chatbot from '@/components/Chatbot'
 
 export const metadata: Metadata = {
   title: 'Louis Miguel Bernal — Full Stack Developer',
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         {children}
+        <Chatbot />
       </body>
     </html>
   )
