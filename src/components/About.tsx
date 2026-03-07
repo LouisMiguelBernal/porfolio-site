@@ -63,15 +63,15 @@ const TYPE_ICON: Record<string, string> = {
 }
 
 const TYPE_COLOR: Record<string, string> = {
-  work: 'var(--accent)',
+  work: '#c084fc',
   org:  'var(--accent-2)',
-  edu:  '#c084fc',
+  edu:  'var(--accent)',
 }
 
 const TYPE_COLOR_RAW: Record<string, string> = {
-  work: '#4af2a1',
+  work: '#c084fc',
   org:  '#60a5fa',
-  edu:  '#c084fc',
+  edu:  '#4af2a1',
 }
 
 function useScrollAnimation(ref: React.RefObject<HTMLElement | null>) {
@@ -393,6 +393,186 @@ function Timeline() {
   )
 }
 
+// ── Dust particle helpers ─────────────────────────────────────────────────────
+const DUST_COUNT = 18
+
+function randomBetween(a: number, b: number) {
+  return a + Math.random() * (b - a)
+}
+
+function InfoCard({
+  label, value, href, logo, color, colorDim, colorBorder, colorGlow, isGitHub,
+}: {
+  label: string; value: string; href: string; logo: string
+  color: string; colorDim: string; colorBorder: string; colorGlow: string
+  isGitHub?: boolean
+}) {
+  const [hovered, setHovered] = useState(false)
+  const [particles, setParticles] = useState<{ id: number; x: number; size: number; delay: number; duration: number; opacity: number }[]>([])
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: DUST_COUNT }, (_, i) => ({
+        id: i,
+        x: randomBetween(5, 95),
+        size: randomBetween(2, 5),
+        delay: randomBetween(0, 2.4),
+        duration: randomBetween(1.8, 3.2),
+        opacity: randomBetween(0.35, 0.9),
+      }))
+    )
+  }, [])
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex', alignItems: 'center', gap: '16px',
+        background: isGitHub ? 'var(--github-card-bg)' : colorDim,
+        border: `1px solid ${hovered ? color : colorBorder}`,
+        borderRadius: '16px',
+        padding: '16px 20px',
+        textDecoration: 'none',
+        position: 'relative',
+        overflow: 'hidden',
+        transform: hovered ? 'scale(1.035) translateY(-3px)' : 'scale(1) translateY(0)',
+        boxShadow: hovered ? `0 20px 48px ${colorGlow}, 0 0 0 1px ${color}44` : 'none',
+        transition: 'transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease',
+        cursor: 'pointer',
+      }}
+    >
+      {/* Shimmer top line */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+        background: `linear-gradient(90deg, transparent, ${color}99, transparent)`,
+      }} />
+
+      {/* Always-on dust — falls from top */}
+      {particles.map(p => (
+        <span
+          key={p.id}
+          style={{
+            position: 'absolute',
+            left: `${p.x}%`,
+            top: '-6px',
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            borderRadius: '50%',
+            background: color,
+            opacity: p.opacity,
+            animation: `dustFall ${p.duration}s ${p.delay}s ease-in infinite`,
+            pointerEvents: 'none',
+            zIndex: 0,
+          }}
+        />
+      ))}
+
+      {/* Logo box — GitHub: white bg always so black logo shows on dark bg card */}
+      <div style={{
+        width: '48px', height: '48px', borderRadius: '12px',
+        background: isGitHub ? '#ffffff' : 'var(--bg)',
+        border: `1px solid ${colorBorder}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0,
+        boxShadow: `0 0 16px ${colorGlow}`,
+        padding: '8px',
+        zIndex: 1,
+        position: 'relative',
+        transition: 'box-shadow 0.28s ease',
+      }}>
+        <img src={logo} alt={label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      </div>
+
+      {/* Text */}
+      <div style={{ flex: 1, minWidth: 0, position: 'relative', zIndex: 1 }}>
+        <p style={{
+          fontFamily: 'var(--font-mono)', fontSize: '10px',
+          color: color, letterSpacing: '0.12em',
+          textTransform: 'uppercase', marginBottom: '4px',
+        }}>
+          {label}
+        </p>
+        <p style={{
+          fontFamily: 'var(--font-sans)', fontSize: '14px',
+          fontWeight: 600, color: isGitHub ? 'var(--github-card-text)' : 'var(--text)',
+          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+        }}>
+          {value}
+        </p>
+      </div>
+
+      {/* Arrow */}
+      <svg style={{ color, flexShrink: 0, opacity: 0.7, position: 'relative', zIndex: 1 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+        <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+
+      <style>{`
+        /* GitHub card — dark mode: deep green-tinted black */
+        :root {
+          --github-card-bg:   rgba(16,20,17,0.92);
+          --github-card-text: #F2F5F3;
+        }
+        /* GitHub card — light mode: soft grey-green matching DLSUD/LinkedIn hue */
+        @media (prefers-color-scheme: light) {
+          :root {
+            --github-card-bg:   rgba(35,41,37,0.08);
+            --github-card-text: #232925;
+          }
+        }
+        @keyframes dustFall {
+          0%   { transform: translateY(0) scale(1);    opacity: 0; }
+          15%  { opacity: 1; }
+          85%  { opacity: 0.5; }
+          100% { transform: translateY(80px) scale(0.2); opacity: 0; }
+        }
+      `}</style>
+    </a>
+  )
+}
+
+function InfoCards() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      <InfoCard
+        label="School"
+        value="DLSUD — BSCS Intelligent Systems"
+        href="https://www.dlsud.edu.ph/"
+        logo="/about/dlsud.png"
+        color="#16a34a"
+        colorDim="rgba(22,163,74,0.10)"
+        colorBorder="rgba(22,163,74,0.30)"
+        colorGlow="rgba(22,163,74,0.22)"
+      />
+      <InfoCard
+        label="GitHub"
+        value="github.com/LouisMiguelBernal"
+        href="https://github.com/LouisMiguelBernal"
+        logo="/about/github.png"
+        color="#E4EBE6"
+        colorDim="rgba(16,20,17,0.92)"
+        colorBorder="rgba(182,191,184,0.35)"
+        colorGlow="rgba(228,235,230,0.10)"
+        isGitHub
+      />
+      <InfoCard
+        label="LinkedIn"
+        value="linkedin.com/in/louisbernal"
+        href="https://www.linkedin.com/in/louisbernal/"
+        logo="/about/linkedin.png"
+        color="#0ea5e9"
+        colorDim="rgba(14,165,233,0.10)"
+        colorBorder="rgba(14,165,233,0.30)"
+        colorGlow="rgba(14,165,233,0.22)"
+      />
+    </div>
+  )
+}
+
 export default function About() {
   const headRef = useRef<HTMLDivElement>(null)
   const bioRef  = useRef<HTMLDivElement>(null)
@@ -458,81 +638,22 @@ export default function About() {
               <span style={{ color: 'var(--text)' }}>Cavite, Philippines</span>.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {[
-                { label: 'School',   value: 'DLSUD — BSCS Intelligent Systems', href: 'https://www.dlsud.edu.ph/',                  icon: '🎓' },
-                { label: 'GitHub',   value: 'github.com/LouisMiguelBernal',      href: 'https://github.com/LouisMiguelBernal',       icon: '⌥' },
-                { label: 'LinkedIn', value: 'linkedin.com/in/louisbernal',       href: 'https://www.linkedin.com/in/louisbernal/',   icon: '💼' },
-              ].map(item => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '16px',
-                    background: 'var(--bg-2)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '14px',
-                    padding: '16px 20px',
-                    textDecoration: 'none',
-                    transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={e => {
-                    const el = e.currentTarget
-                    el.style.transform = 'scale(1.03) translateY(-2px)'
-                    el.style.boxShadow = '0 12px 32px rgba(0,0,0,0.2), 0 0 0 1px var(--accent)'
-                    el.style.borderColor = 'var(--accent)'
-                  }}
-                  onMouseLeave={e => {
-                    const el = e.currentTarget
-                    el.style.transform = 'scale(1) translateY(0)'
-                    el.style.boxShadow = 'none'
-                    el.style.borderColor = 'var(--border)'
-                  }}
-                >
-                  <div style={{
-                    width: '42px', height: '42px', borderRadius: '10px',
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '18px', flexShrink: 0,
-                  }}>
-                    {item.icon}
-                  </div>
-                  <div>
-                    <p style={{
-                      fontFamily: 'var(--font-mono)', fontSize: '10px',
-                      color: 'var(--accent)', letterSpacing: '0.12em',
-                      textTransform: 'uppercase', marginBottom: '3px',
-                    }}>
-                      {item.label}
-                    </p>
-                    <p style={{
-                      fontFamily: 'var(--font-sans)', fontSize: '14px',
-                      fontWeight: 600, color: 'var(--text)',
-                    }}>
-                      {item.value}
-                    </p>
-                  </div>
-                  <svg style={{ marginLeft: 'auto', color: 'var(--text-subtle)', flexShrink: 0 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                    <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-                  </svg>
-                </a>
-              ))}
-            </div>
+            <InfoCards />
 
             {/* Legend — pushed to bottom to align with right column */}
             <div style={{ marginTop: 'auto', paddingTop: '36px', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
               {[
-                { label: 'Work',         color: 'var(--accent)',   icon: '◈' },
-                { label: 'Organization', color: 'var(--accent-2)', icon: '◉' },
-                { label: 'Education',    color: '#c084fc',          icon: '⬡' },
+                { label: 'Work',         color: '#c084fc' },
+                { label: 'Organization', color: '#60a5fa' },
+                { label: 'Education',    color: '#4af2a1' },
               ].map(l => (
-                <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ color: l.color, fontSize: '14px' }}>{l.icon}</span>
+                <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{
+                    width: '10px', height: '10px', borderRadius: '50%',
+                    background: l.color,
+                    boxShadow: `0 0 6px ${l.color}cc, 0 0 14px ${l.color}66`,
+                    flexShrink: 0,
+                  }} />
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-subtle)', letterSpacing: '0.05em' }}>
                     {l.label}
                   </span>

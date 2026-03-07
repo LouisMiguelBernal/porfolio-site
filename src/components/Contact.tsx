@@ -25,11 +25,15 @@ function PhoneIcon({ size = 20, color = 'currentColor' }: { size?: number; color
   )
 }
 
+// Per-brand colors
 const contactLinks = [
   {
     label: 'LINKEDIN',
     value: 'linkedin.com/in/louisbernal',
     href: 'https://www.linkedin.com/in/louisbernal/',
+    color: '#0a66c2',
+    dimColor: 'rgba(10,102,194,0.12)',
+    borderColor: 'rgba(10,102,194,0.3)',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
@@ -41,6 +45,9 @@ const contactLinks = [
     label: 'GITHUB',
     value: 'github.com/LouisMiguelBernal',
     href: 'https://github.com/LouisMiguelBernal',
+    color: '#6e7681',
+    dimColor: 'rgba(110,118,129,0.12)',
+    borderColor: 'rgba(110,118,129,0.3)',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
@@ -51,6 +58,9 @@ const contactLinks = [
     label: 'EMAIL',
     value: 'miguellouis.work@gmail.com',
     href: 'mailto:miguellouis.work@gmail.com',
+    color: '#4af2a1',
+    dimColor: 'rgba(74,242,161,0.10)',
+    borderColor: 'rgba(74,242,161,0.3)',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -62,6 +72,9 @@ const contactLinks = [
     label: 'LOCATION',
     value: 'Cavite, Philippines',
     href: null,
+    color: 'var(--text-muted)',
+    dimColor: 'var(--bg-3)',
+    borderColor: 'var(--border)',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -70,6 +83,86 @@ const contactLinks = [
     ),
   },
 ]
+
+function ContactLinkRow({ item }: { item: typeof contactLinks[0] }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex', alignItems: 'center', gap: '14px',
+        padding: '12px 14px',
+        borderRadius: '14px',
+        background: hovered ? item.dimColor : 'transparent',
+        border: `1px solid ${hovered ? item.borderColor : 'transparent'}`,
+        transition: 'all 0.22s ease',
+        cursor: item.href ? 'pointer' : 'default',
+        position: 'relative',
+      }}
+      onClick={() => item.href && window.open(item.href, item.href.startsWith('mailto') ? '_self' : '_blank')}
+    >
+      {/* Left accent */}
+      <div style={{
+        position: 'absolute', left: 0, top: '8px', bottom: '8px',
+        width: '2.5px', borderRadius: '2px',
+        background: item.color,
+        opacity: hovered ? 1 : 0,
+        transition: 'opacity 0.22s ease',
+        boxShadow: `0 0 8px ${item.color}`,
+      }} />
+
+      {/* Icon box */}
+      <div style={{
+        width: '40px', height: '40px', borderRadius: '12px',
+        background: hovered ? item.dimColor : 'var(--bg-3)',
+        border: `1px solid ${hovered ? item.borderColor : 'var(--border)'}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: hovered ? item.color : 'var(--text-muted)',
+        flexShrink: 0,
+        transition: 'all 0.22s ease',
+        boxShadow: hovered ? `0 0 16px ${item.color}30` : 'none',
+      }}>
+        {item.icon}
+      </div>
+
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p style={{
+          fontFamily: 'var(--font-mono)', fontSize: '10px',
+          color: hovered ? item.color : 'var(--text-subtle)',
+          letterSpacing: '0.12em', marginBottom: '2px',
+          transition: 'color 0.22s ease',
+        }}>
+          {item.label}
+        </p>
+        <span style={{
+          fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600,
+          color: hovered ? 'var(--text)' : 'var(--text-muted)',
+          transition: 'color 0.22s ease',
+          display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+        }}>
+          {item.value}
+        </span>
+      </div>
+
+      {/* Arrow on hover */}
+      {item.href && (
+        <div style={{
+          opacity: hovered ? 1 : 0,
+          transform: hovered ? 'translateX(0)' : 'translateX(-4px)',
+          transition: 'all 0.22s ease',
+          color: item.color, flexShrink: 0,
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function Contact() {
   const headRef  = useRef<HTMLDivElement>(null)
@@ -83,6 +176,7 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending]     = useState(false)
   const [error, setError]         = useState('')
+  const [focused, setFocused]     = useState<string | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }))
@@ -96,17 +190,11 @@ export default function Contact() {
     }
     setSending(true)
     setError('')
-
     try {
       await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        {
-          name:    form.name,
-          email:   form.email,
-          subject: form.subject || 'No Subject',
-          message: form.message,
-        },
+        { name: form.name, email: form.email, subject: form.subject || 'No Subject', message: form.message },
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
       )
       setSubmitted(true)
@@ -118,23 +206,49 @@ export default function Contact() {
     }
   }
 
-  const inputStyle = {
-    width: '100%',
-    background: 'var(--surface)',
-    border: '1px solid var(--border)',
-    borderRadius: '10px',
-    padding: '14px 16px',
-    fontFamily: 'var(--font-sans)',
-    fontSize: '14px',
-    color: 'var(--text)',
-    outline: 'none',
-    transition: 'border-color 0.2s',
-    boxSizing: 'border-box' as const,
+  const inputBase: React.CSSProperties = {
+  width: '100%',
+  background: 'var(--bg)',
+  borderWidth: '1px',
+  borderStyle: 'solid',
+  borderColor: 'var(--border)',       // ← separate, not shorthand
+  borderRadius: '12px',
+  padding: '13px 16px',
+  fontFamily: 'var(--font-sans)',
+  fontSize: '14px',
+  color: 'var(--text)',
+  outline: 'none',
+  transition: 'border-color 0.2s, box-shadow 0.2s',
+  boxSizing: 'border-box' as const,
+}
+
+  const inputFocused: React.CSSProperties = {
+  ...inputBase,
+  borderColor: 'var(--accent)',       // ← only overrides borderColor, no conflict
+  boxShadow: '0 0 0 3px rgba(74,242,161,0.1)',
   }
 
+  const getInputStyle = (field: string) =>
+    focused === field ? inputFocused : inputBase
+
   return (
-    <section id="contact" style={{ padding: '120px 32px', position: 'relative' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <section id="contact" style={{ padding: '120px 32px', position: 'relative', overflow: 'hidden' }}>
+
+      {/* Subtle BG glow */}
+      <div style={{
+        position: 'absolute', bottom: '-100px', right: '-100px',
+        width: '500px', height: '500px',
+        background: 'radial-gradient(circle, rgba(74,242,161,0.04) 0%, transparent 65%)',
+        pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'absolute', top: '-80px', left: '-80px',
+        width: '400px', height: '400px',
+        background: 'radial-gradient(circle, rgba(10,102,194,0.04) 0%, transparent 65%)',
+        pointerEvents: 'none',
+      }} />
+
+      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative' }}>
 
         {/* ── Header ── */}
         <div ref={headRef} className="section-animate" style={{ marginBottom: '56px' }}>
@@ -168,72 +282,57 @@ export default function Contact() {
             background: 'var(--bg-2)',
             border: '1px solid var(--border)',
             borderRadius: '20px',
-            padding: '36px 32px',
+            padding: '36px 28px',
             position: 'relative',
             overflow: 'hidden',
-            height: '100%',
             boxSizing: 'border-box' as const,
           }}>
+            {/* Top accent line */}
             <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-              background: 'linear-gradient(90deg, var(--accent), transparent)',
+              position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+              background: 'linear-gradient(90deg, #0a66c2, #4af2a1, transparent)',
             }} />
 
             <h3 style={{
-              fontFamily: 'var(--font-sans)', fontSize: '26px', fontWeight: 700,
-              color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: '12px', lineHeight: 1.1,
+              fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700,
+              color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: '10px', lineHeight: 1.2,
             }}>
               My Inbox is Always Open
             </h3>
             <p style={{
               fontFamily: 'var(--font-sans)', fontSize: '14px',
-              color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '36px',
+              color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '28px',
             }}>
               Reach out through any of the channels below. I'll get back to you within 24 hours.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {/* Divider */}
+            <div style={{ height: '1px', background: 'var(--bg-3)', marginBottom: '20px' }} />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {contactLinks.map(item => (
-                <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'var(--accent)', flexShrink: 0,
-                  }}>
-                    {item.icon}
-                  </div>
-                  <div>
-                    <p style={{
-                      fontFamily: 'var(--font-mono)', fontSize: '10px',
-                      color: 'var(--accent)', letterSpacing: '0.12em',
-                      marginBottom: '2px',
-                    }}>
-                      {item.label}
-                    </p>
-                    {item.href ? (
-                      <a
-                        href={item.href}
-                        target={item.href.startsWith('mailto') ? undefined : '_blank'}
-                        rel="noopener noreferrer"
-                        style={{
-                          fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600,
-                          color: 'var(--text)', textDecoration: 'none', transition: 'color 0.2s',
-                        }}
-                        onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-                        onMouseLeave={e => (e.currentTarget.style.color = 'var(--text)')}
-                      >
-                        {item.value}
-                      </a>
-                    ) : (
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                        {item.value}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <ContactLinkRow key={item.label} item={item} />
               ))}
+            </div>
+
+            {/* Availability badge */}
+            <div style={{
+              marginTop: '28px',
+              display: 'flex', alignItems: 'center', gap: '10px',
+              padding: '12px 16px',
+              borderRadius: '12px',
+              background: 'rgba(74,242,161,0.06)',
+              border: '1px solid rgba(74,242,161,0.2)',
+            }}>
+              <div style={{
+                width: '8px', height: '8px', borderRadius: '50%',
+                background: '#4af2a1', flexShrink: 0,
+                boxShadow: '0 0 0 3px rgba(74,242,161,0.2)',
+                animation: 'ping 2s ease-in-out infinite',
+              }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '0.06em' }}>
+                Available for new opportunities
+              </span>
             </div>
           </div>
 
@@ -246,28 +345,29 @@ export default function Contact() {
             position: 'relative',
             overflow: 'hidden',
             transitionDelay: '0.1s',
-            height: '100%',
             boxSizing: 'border-box' as const,
           }}>
+            {/* Top accent line */}
             <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+              position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
               background: 'linear-gradient(90deg, var(--accent), transparent)',
             }} />
 
             {submitted ? (
               <div style={{ textAlign: 'center', padding: '60px 0' }}>
                 <div style={{
-                  width: '64px', height: '64px', borderRadius: '50%',
-                  background: 'var(--accent-dim)',
+                  width: '68px', height: '68px', borderRadius: '50%',
+                  background: 'rgba(74,242,161,0.1)',
                   border: '1px solid rgba(74,242,161,0.3)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   margin: '0 auto 20px',
+                  boxShadow: '0 0 30px rgba(74,242,161,0.15)',
                 }}>
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4af2a1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
+                <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>
                   Message Sent!
                 </h3>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)' }}>
@@ -285,9 +385,9 @@ export default function Contact() {
                     <input
                       name="name" value={form.name} onChange={handleChange}
                       placeholder="John Doe"
-                      style={inputStyle}
-                      onFocus={e => (e.target.style.borderColor = 'var(--accent)')}
-                      onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+                      style={getInputStyle('name')}
+                      onFocus={() => setFocused('name')}
+                      onBlur={() => setFocused(null)}
                     />
                   </div>
                   <div>
@@ -297,9 +397,9 @@ export default function Contact() {
                     <input
                       name="email" value={form.email} onChange={handleChange}
                       placeholder="john@example.com" type="email"
-                      style={inputStyle}
-                      onFocus={e => (e.target.style.borderColor = 'var(--accent)')}
-                      onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+                      style={getInputStyle('email')}
+                      onFocus={() => setFocused('email')}
+                      onBlur={() => setFocused(null)}
                     />
                   </div>
                 </div>
@@ -312,9 +412,9 @@ export default function Contact() {
                   <input
                     name="subject" value={form.subject} onChange={handleChange}
                     placeholder="Project Inquiry"
-                    style={inputStyle}
-                    onFocus={e => (e.target.style.borderColor = 'var(--accent)')}
-                    onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+                    style={getInputStyle('subject')}
+                    onFocus={() => setFocused('subject')}
+                    onBlur={() => setFocused(null)}
                   />
                 </div>
 
@@ -327,24 +427,23 @@ export default function Contact() {
                     name="message" value={form.message} onChange={handleChange}
                     placeholder="Tell me about your project..."
                     rows={5}
-                    style={{ ...inputStyle, resize: 'vertical', minHeight: '140px' }}
-                    onFocus={e => (e.target.style.borderColor = 'var(--accent)')}
-                    onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+                    style={{ ...getInputStyle('message'), resize: 'vertical', minHeight: '140px' }}
+                    onFocus={() => setFocused('message')}
+                    onBlur={() => setFocused(null)}
                   />
                 </div>
 
-                {/* Error message */}
+                {/* Error */}
                 {error && (
                   <div style={{
-                    marginBottom: '16px',
-                    padding: '12px 16px',
-                    borderRadius: '10px',
-                    background: 'rgba(255,80,80,0.08)',
-                    border: '1px solid rgba(255,80,80,0.25)',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '13px',
-                    color: '#ff6b6b',
+                    marginBottom: '16px', padding: '12px 16px', borderRadius: '10px',
+                    background: 'rgba(255,80,80,0.08)', border: '1px solid rgba(255,80,80,0.25)',
+                    fontFamily: 'var(--font-sans)', fontSize: '13px', color: '#ff6b6b',
+                    display: 'flex', alignItems: 'center', gap: '8px',
                   }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
                     {error}
                   </div>
                 )}
@@ -355,8 +454,8 @@ export default function Contact() {
                   disabled={sending}
                   style={{
                     width: '100%',
-                    background: sending ? 'var(--surface)' : 'var(--accent)',
-                    border: 'none', borderRadius: '10px',
+                    background: sending ? 'var(--bg-3)' : 'var(--accent)',
+                    border: 'none', borderRadius: '12px',
                     padding: '15px 24px',
                     fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 700,
                     color: sending ? 'var(--text-muted)' : '#050a07',
@@ -364,9 +463,10 @@ export default function Contact() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                     transition: 'all 0.2s', letterSpacing: '0.02em',
                     marginBottom: '16px',
+                    boxShadow: sending ? 'none' : '0 4px 24px rgba(74,242,161,0.25)',
                   }}
-                  onMouseEnter={e => { if (!sending) e.currentTarget.style.opacity = '0.88' }}
-                  onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
+                  onMouseEnter={e => { if (!sending) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(74,242,161,0.35)' } }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = sending ? 'none' : '0 4px 24px rgba(74,242,161,0.25)' }}
                 >
                   {sending ? (
                     <>
@@ -403,13 +503,13 @@ export default function Contact() {
           from { transform: rotate(0deg); }
           to   { transform: rotate(360deg); }
         }
+        @keyframes ping {
+          0%, 100% { box-shadow: 0 0 0 3px rgba(74,242,161,0.2); }
+          50%       { box-shadow: 0 0 0 6px rgba(74,242,161,0.08); }
+        }
         @media (max-width: 768px) {
-          .contact-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .form-row {
-            grid-template-columns: 1fr !important;
-          }
+          .contact-grid { grid-template-columns: 1fr !important; }
+          .form-row     { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>
