@@ -48,7 +48,10 @@ export default function IntroLoader({ onDone }: { onDone: () => void }) {
     timers.push(setTimeout(() => setPhase('logo'), last + 200))
     timers.push(setTimeout(() => setLogoVisible(true), last + 400))
     timers.push(setTimeout(() => setPhase('exit'), last + 2400))
-    timers.push(setTimeout(() => onDoneRef.current?.(), last + 2950))
+    timers.push(setTimeout(() => {
+    onDoneRef.current?.()
+    window.dispatchEvent(new Event('intro:done'))
+}, last + 2950))
 
     return () => timers.forEach(clearTimeout)
   }, [])

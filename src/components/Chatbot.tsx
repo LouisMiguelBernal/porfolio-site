@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { buildContext } from '@/components/knowledge-base'
 
 interface Message {
@@ -38,11 +38,9 @@ const SUGGESTIONS = [
 function useIsDark() {
   const [isDark, setIsDark] = useState(true)
   useEffect(() => {
-    // Read initial value set by Navbar on mount
     const check = () =>
       setIsDark(document.documentElement.getAttribute('data-theme') !== 'light')
     check()
-    // Watch for Navbar toggling data-theme attribute
     const observer = new MutationObserver(check)
     observer.observe(document.documentElement, {
       attributes: true,
@@ -56,30 +54,21 @@ function useIsDark() {
 // ── Theme tokens ───────────────────────────────────────────────────────────
 function useTheme(isDark: boolean) {
   return {
-    // Panel backgrounds
     panelBg:      isDark ? 'linear-gradient(160deg,#080f0c 0%,#050d0a 50%,#060e0b 100%)'
                          : 'linear-gradient(160deg,#f0faf5 0%,#e8f5ee 50%,#edf8f2 100%)',
     panelBorder:  isDark ? 'rgba(74,242,161,0.2)'    : 'rgba(10,102,194,0.2)',
     panelShadow:  isDark
       ? '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(74,242,161,0.08), 0 0 60px rgba(74,242,161,0.05)'
       : '0 32px 80px rgba(0,0,0,0.12), 0 0 0 1px rgba(10,102,194,0.08), 0 0 40px rgba(74,242,161,0.08)',
-
-    // Header
     headerBg:     isDark ? 'linear-gradient(180deg,rgba(74,242,161,0.04) 0%,transparent 100%)'
                          : 'linear-gradient(180deg,rgba(74,242,161,0.08) 0%,transparent 100%)',
     headerBorder: isDark ? 'rgba(74,242,161,0.1)'    : 'rgba(10,102,194,0.12)',
     titleColor:   isDark ? '#fff'                    : '#0a1a10',
     titleShadow:  isDark ? '0 0 20px rgba(74,242,161,0.4)' : 'none',
-
-    // Status
     statusColor:  isDark ? 'rgba(74,242,161,0.5)'    : 'rgba(10,102,194,0.6)',
-
-    // Close btn
     closeBg:      isDark ? 'rgba(255,255,255,0.04)'  : 'rgba(0,0,0,0.04)',
     closeBorder:  isDark ? 'rgba(255,255,255,0.08)'  : 'rgba(0,0,0,0.1)',
     closeColor:   isDark ? 'rgba(255,255,255,0.4)'   : 'rgba(0,0,0,0.4)',
-
-    // Messages
     userBubbleBg:   isDark
       ? 'linear-gradient(135deg,rgba(74,242,161,0.15) 0%,rgba(0,245,255,0.08) 100%)'
       : 'linear-gradient(135deg,rgba(10,102,194,0.12) 0%,rgba(74,242,161,0.08) 100%)',
@@ -91,20 +80,14 @@ function useTheme(isDark: boolean) {
     aiBubbleBorder: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
     aiBubbleColor:  isDark ? 'rgba(200,220,210,0.9)'  : '#1a2a20',
     aiBubbleShadow: isDark ? '0 4px 20px rgba(0,0,0,0.2)' : '0 4px 20px rgba(0,0,0,0.06)',
-
-    // User avatar
     userAvatarBg:    isDark ? 'linear-gradient(135deg,rgba(74,242,161,0.3),rgba(0,245,255,0.2))'
                             : 'linear-gradient(135deg,rgba(10,102,194,0.2),rgba(74,242,161,0.15))',
     userAvatarBorder: isDark ? 'rgba(74,242,161,0.4)' : 'rgba(10,102,194,0.35)',
     userAvatarColor:  isDark ? '#4af2a1'               : '#0a66c2',
-
-    // Loading bubble
     loadingBg:     isDark
       ? 'linear-gradient(135deg,rgba(255,255,255,0.04),rgba(74,242,161,0.03))'
       : 'linear-gradient(135deg,rgba(255,255,255,0.9),rgba(74,242,161,0.05))',
     loadingBorder: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-
-    // Input area
     inputAreaBg:    isDark ? 'linear-gradient(0deg,rgba(74,242,161,0.03) 0%,transparent 100%)'
                            : 'linear-gradient(0deg,rgba(74,242,161,0.04) 0%,transparent 100%)',
     inputAreaBorder: isDark ? 'rgba(74,242,161,0.1)' : 'rgba(10,102,194,0.1)',
@@ -115,11 +98,7 @@ function useTheme(isDark: boolean) {
     inputShadowActive: isDark
       ? '0 0 0 3px rgba(74,242,161,0.06),inset 0 0 20px rgba(74,242,161,0.03)'
       : '0 0 0 3px rgba(10,102,194,0.08)',
-
-    // Orb mask (needs to match panel bg approximately)
     orbMask:       isDark ? '#080f0c'               : '#edf8f2',
-
-    // Grid lines
     gridOpacity:   isDark ? 0.04                    : 0.06,
     gridColor:     isDark ? '#4af2a1'               : '#0a66c2',
   }
@@ -135,7 +114,6 @@ function SendIcon() {
   )
 }
 
-// ── Plasma Orb ─────────────────────────────────────────────────────────────
 function PlasmaOrb({ size = 38, orbMask }: { size?: number; orbMask: string }) {
   return (
     <div style={{ width: size, height: size, borderRadius: '50%', position: 'relative', flexShrink: 0 }}>
@@ -144,10 +122,7 @@ function PlasmaOrb({ size = 38, orbMask }: { size?: number; orbMask: string }) {
         background: 'conic-gradient(from 0deg, #4af2a1, #0a66c2, #4af2a1, #00f5ff, #4af2a1)',
         animation: 'orbSpin 3s linear infinite', opacity: 0.85,
       }} />
-      <div style={{
-        position: 'absolute', inset: '2px', borderRadius: '50%',
-        background: orbMask, zIndex: 1,
-      }} />
+      <div style={{ position: 'absolute', inset: '2px', borderRadius: '50%', background: orbMask, zIndex: 1 }} />
       <div style={{
         position: 'absolute', inset: '4px', borderRadius: '50%',
         background: 'radial-gradient(circle at 35% 35%, #00f5ff 0%, #0a66c2 30%, #4af2a1 60%, #050a07 100%)',
@@ -171,7 +146,6 @@ function PlasmaOrb({ size = 38, orbMask }: { size?: number; orbMask: string }) {
   )
 }
 
-// ── Typing dots ────────────────────────────────────────────────────────────
 function TypingDots() {
   return (
     <div style={{ display: 'flex', gap: '5px', padding: '4px 2px', alignItems: 'center' }}>
@@ -187,7 +161,6 @@ function TypingDots() {
   )
 }
 
-// ── Message bubble ─────────────────────────────────────────────────────────
 function Bubble({ msg, isNew, t, orbMask }: {
   msg: Message; isNew?: boolean
   t: ReturnType<typeof useTheme>
@@ -241,9 +214,8 @@ function Bubble({ msg, isNew, t, orbMask }: {
   )
 }
 
-// ── FAB Orb ────────────────────────────────────────────────────────────────
-function FabOrb({ open, pulse, onClick, orbMask }: {
-  open: boolean; pulse: boolean; onClick: () => void; orbMask: string
+function FabOrb({ open, pulse, onClick, orbMask, visible }: {
+  open: boolean; pulse: boolean; onClick: () => void; orbMask: string; visible: boolean
 }) {
   return (
     <button onClick={onClick} style={{
@@ -251,6 +223,11 @@ function FabOrb({ open, pulse, onClick, orbMask }: {
       width: '60px', height: '60px', borderRadius: '50%',
       background: 'transparent', border: 'none', cursor: 'pointer',
       zIndex: 10000, padding: 0,
+      // Fade-in when intro is done
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'scale(1) translateY(0)' : 'scale(0.7) translateY(12px)',
+      transition: 'opacity 0.5s cubic-bezier(0.34,1.56,0.64,1), transform 0.5s cubic-bezier(0.34,1.56,0.64,1)',
+      pointerEvents: visible ? 'auto' : 'none',
     }}>
       {pulse && !open && (<>
         <div style={{
@@ -311,16 +288,34 @@ export default function Chatbot() {
   const isDark  = useIsDark()
   const t       = useTheme(isDark)
 
-  const [open, setOpen]         = useState(false)
-  const [messages, setMessages] = useState<Message[]>([
+  const [open, setOpen]           = useState(false)
+  const [introReady, setIntroReady] = useState(false)   // ← gates the FAB
+  const [messages, setMessages]   = useState<Message[]>([
     { role: 'model', text: "Hey there! 👋 I'm Luigi, Louis's AI assistant. Ask me anything about his skills, projects, experience, or availability!" }
   ])
-  const [newIdx, setNewIdx]     = useState<number | null>(null)
-  const [input, setInput]       = useState('')
-  const [loading, setLoading]   = useState(false)
-  const [pulse, setPulse]       = useState(true)
-  const bottomRef               = useRef<HTMLDivElement>(null)
-  const inputRef                = useRef<HTMLInputElement>(null)
+  const [newIdx, setNewIdx]       = useState<number | null>(null)
+  const [input, setInput]         = useState('')
+  const [loading, setLoading]     = useState(false)
+  const [pulse, setPulse]         = useState(true)
+  const bottomRef                 = useRef<HTMLDivElement>(null)
+  const inputRef                  = useRef<HTMLInputElement>(null)
+
+  // ── Wait for IntroLoader to signal it's done ──────────────────────────
+  useEffect(() => {
+    const handler = () => {
+      // Small extra delay so the intro fade-out fully completes before FAB pops in
+      setTimeout(() => setIntroReady(true), 300)
+    }
+    window.addEventListener('intro:done', handler)
+    return () => window.removeEventListener('intro:done', handler)
+  }, [])
+
+  // Gate FAB until IntroLoader fires intro:done
+  useEffect(() => {
+    const handler = () => setTimeout(() => setIntroReady(true), 300)
+    window.addEventListener('intro:done', handler)
+    return () => window.removeEventListener('intro:done', handler)
+  }, [])
 
   useEffect(() => { if (open) setPulse(false) }, [open])
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, loading])
@@ -430,8 +425,8 @@ export default function Chatbot() {
         }
       `}</style>
 
-      {/* ── Chat Panel ── */}
-      {open && (
+      {/* ── Chat Panel — only mount after intro is done ── */}
+      {introReady && open && (
         <div style={{
           position: 'fixed', bottom: '96px', right: '24px',
           width: '370px', height: '540px',
@@ -598,7 +593,14 @@ export default function Chatbot() {
         </div>
       )}
 
-      <FabOrb open={open} pulse={pulse} onClick={() => setOpen(o => !o)} orbMask={t.orbMask} />
+      {/* FAB — always rendered but invisible/inert until introReady */}
+      <FabOrb
+        open={open}
+        pulse={pulse}
+        onClick={() => setOpen(o => !o)}
+        orbMask={t.orbMask}
+        visible={introReady}
+      />
     </>
   )
 }
